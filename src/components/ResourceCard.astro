@@ -17,6 +17,7 @@ const { title, description, url, category, isImage = false } = Astro.props;
     <h3>{title}</h3>
   </div>
   <div class="resource-card-body">
+    <img src="/src/assets/thumbnail-placeholder.svg" alt="Thumbnail preview" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.75rem;">
     <p>{description}</p>
   </div>
   <div class="resource-card-footer">

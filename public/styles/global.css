@@ -1,12 +1,14 @@
 :root {
-  --gh-color-text: #24292f;
-  --gh-color-text-secondary: #586069;
-  --gh-color-bg: #ffffff;
-  --gh-color-border: #e1e4e8;
-  --gh-color-accent: #0366d6;
-  --gh-color-card-bg: #f6f8fa;
+  --gh-color-text: #e0e0e0; /* Off-white text */
+  --gh-color-text-secondary: #a0a0a0; /* Greyish secondary text */
+  --gh-color-bg: #121212; /* Dark background */
+  --gh-color-border: #333333; /* Darker border */
+  --gh-color-accent: #bb86fc; /* Light accent color */
+  --gh-color-card-bg: #1e1e1e; /* Slightly lighter card background */
   --arknights-primary: #d32f2f;
   --arknights-secondary: #b71c1c;
+  --arknights-light: #ef5350; /* Lighter red variant */
+  --arknights-dark: #9a0007; /* Darker red variant */
 }
 
 body {
@@ -22,6 +24,7 @@ body {
   border-bottom: 1px solid var(--gh-color-border);
   padding: 0.5rem 1rem;
   background-color: var(--gh-color-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .gh-header-container {
@@ -40,6 +43,11 @@ body {
   color: var(--gh-color-text);
   font-weight: 600;
   font-size: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.gh-header-logo:hover {
+  transform: scale(1.05);
 }
 
 .gh-header-logo svg {
@@ -58,11 +66,15 @@ body {
   color: var(--gh-color-text-secondary);
   text-decoration: none;
   font-size: 0.875rem;
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
 }
 
 .gh-header-nav a:hover {
   color: var(--gh-color-text);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 main {
@@ -87,24 +99,29 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
+  padding: 1rem 0;
 }
 
 .resource-card {
   border: 1px solid var(--gh-color-border);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
   background-color: var(--gh-color-card-bg);
-  transition: box-shadow 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .resource-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(211, 47, 47, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--arknights-primary);
 }
 
 .resource-card-header {
   padding: 1rem;
-  background-color: white;
+  background: linear-gradient(to right, var(--arknights-primary), var(--arknights-secondary));
   border-bottom: 1px solid var(--gh-color-border);
+  color: white;
 }
 
 .resource-category {
@@ -125,12 +142,13 @@ main {
 
 .resource-card-body {
   padding: 1rem;
-  background-color: white;
+  background-color: var(--gh-color-card-bg);
+  color: var(--gh-color-text);
 }
 
 .resource-card-footer {
   padding: 0.75rem 1rem;
-  background-color: white;
+  background-color: var(--gh-color-card-bg);
   border-top: 1px solid var(--gh-color-border);
   text-align: right;
 }
@@ -138,24 +156,31 @@ main {
 .resource-link {
   display: inline-block;
   padding: 0.375rem 0.75rem;
-  background-color: var(--arknights-primary);
+  background: linear-gradient(to bottom, var(--arknights-primary), var(--arknights-secondary));
   color: white;
   border-radius: 6px;
   text-decoration: none;
   font-size: 0.875rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .resource-link:hover {
-  background-color: var(--arknights-secondary);
+  background: linear-gradient(to bottom, var(--arknights-secondary), var(--arknights-dark));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
 }
 
 .image-link {
-  background-color: #4a6fa5;
+  background: linear-gradient(to bottom, var(--arknights-primary), var(--arknights-secondary));
 }
 
 .image-link:hover {
-  background-color: #3a5a8c;
+  background: linear-gradient(to bottom, var(--arknights-secondary), var(--arknights-dark));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
 }
 
 .gh-footer {
@@ -172,6 +197,61 @@ main {
   text-align: center;
 }
 
+.hero-banner {
+  background: linear-gradient(135deg, var(--arknights-primary), var(--arknights-secondary));
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.05) 10px,
+    rgba(255, 255, 255, 0.05) 20px
+  );
+  animation: diagonal-slide 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes diagonal-slide {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+.hero-banner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-banner h2 {
+  color: white;
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
+
+.hero-banner p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 1.2rem;
+}
+
 @media (max-width: 768px) {
   .resources-grid {
     grid-template-columns: 1fr;
@@ -179,5 +259,13 @@ main {
   
   .gh-header-nav ul {
     display: none;
+  }
+  
+  .hero-banner h2 {
+    font-size: 1.5rem;
+  }
+  
+  .hero-banner p {
+    font-size: 1rem;
   }
 }

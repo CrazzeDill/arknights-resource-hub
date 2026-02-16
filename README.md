@@ -2,6 +2,15 @@
 
 A community-maintained resource hub for Arknights players, compiling the most useful guides, tools, and information in one place.
 
+## Design Updates
+
+The site has been updated with a dark theme featuring:
+- Dark background with greyish and off-white text
+- Red Arknights logo with white and black outlines
+- Enhanced visual design with gradients, shadows, and animations
+- Improved card layouts with thumbnail placeholders
+- A dynamic hero banner with animated background
+
 ## About
 
 This website serves as a centralized repository for Arknights resources that were previously scattered across various Discord channels, Google Docs, and personal websites. It's designed to help both new and experienced players find the information they need quickly and efficiently.
