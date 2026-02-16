@@ -1,11 +1,103 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import CategorySection from '../components/CategorySection.astro';
+import ResourceCard from '../components/ResourceCard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const baseResources = [
+  {
+    id: "base-workers",
+    title: "Base-Related Resource: Workers",
+    description: "Base teams, combos, and worker efficiency guides",
+    link: "/base-resources#workers"
+  },
+  {
+    id: "base-layout",
+    title: "Base-Related Resource: Layout and Efficiency",
+    description: "Base layout guides, orundum farming, and facility mechanics",
+    link: "/base-resources#layout-efficiency"
+  },
+  {
+    id: "base-infographics",
+    title: "Base-Related Resource: Infographics",
+    description: "Visual guides for base combos and low rarity investments",
+    link: "/base-resources#infographics"
+  }
+];
+
+const futureContent = [
+  {
+    id: "future-banners",
+    title: "Future Content: Banner Information",
+    description: "Upcoming operator banners from CN server",
+    link: "/future-content#banners"
+  },
+  {
+    id: "future-events",
+    title: "Future Content: Event Information",
+    description: "Upcoming events from CN server with projected Global release dates",
+    link: "/future-content#events"
+  },
+  {
+    id: "future-skins",
+    title: "Future Content: Skins Overview",
+    description: "Predicted upcoming skins and Fashion Review items",
+    link: "/future-content#skins"
+  }
+];
+
+const lastUpdated = "February 16, 2026";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Arknights Resource Hub">
+  <div class="page-intro">
+    <h1>Arknights Resource Hub</h1>
+    <p class="lead">A community-maintained collection of resources for Arknights players</p>
+    <p>Last updated: <time datetime={lastUpdated}>{lastUpdated}</time></p>
+  </div>
+
+  <CategorySection id="base-resources" title="Base-Related Resources">
+    {baseResources.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.link}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="future-content" title="Future Content">
+    {futureContent.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.link}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="efficiency" title="Efficiency & Optimization">
+    <ResourceCard 
+      title="Farming Guides & Resources"
+      description="Moe's Sheet, resource math calculations, and recommended farming stages"
+      url="/efficiency"
+    />
+    <ResourceCard 
+      title="Enhancement Packs & Mastery Training"
+      description="Information on free/pro enhancement packs and best mastery trainers"
+      url="/efficiency#enhancement"
+    />
+  </CategorySection>
+
+  <CategorySection id="utilities" title="Various Utilities">
+    <ResourceCard 
+      title="Planning & Database Tools"
+      description="Aceship, Krooster, Penguin Stats, and other essential tools"
+      url="/utilities"
+    />
+    <ResourceCard 
+      title="Wiki Resources"
+      description="Arknights Wiki, PRTS, and module overview information"
+      url="/utilities#wiki"
+    />
+  </CategorySection>
 </Layout>

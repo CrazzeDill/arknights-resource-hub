@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategorySection from '../components/CategorySection.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+
+const utilities = [
+  {
+    title: "Aceship - Unit databases, calculators and planner",
+    description: "Comprehensive database and planning tools (currently updated by Puppiizsunniiz)",
+    url: "https://puppiizsunniiz.github.io/AN-EN-Tags/index.html",
+    category: "Planning Tools"
+  },
+  {
+    title: "Krooster - Roster sharing tool, calculators and planner",
+    description: "Roster management and planning tool",
+    url: "https://www.krooster.com/",
+    category: "Planning Tools"
+  },
+  {
+    title: "Penguin Stats - Drop rates and planner",
+    description: "Drop rate statistics and material planning",
+    url: "https://penguin-stats.io/",
+    category: "Planning Tools"
+  },
+  {
+    title: "Arknights Wiki",
+    description: "Comprehensive wiki covering stages, lore, events, mechanics and operators (migrated from fandom wiki)",
+    url: "https://arknights.wiki.gg/wiki/Arknights_Terra_Wiki",
+    category: "Wiki Resources"
+  },
+  {
+    title: "Module Overview",
+    description: "Complete information on module effects, release information, and unlock conditions",
+    url: "https://bit.ly/AKModules",
+    category: "Wiki Resources"
+  },
+  {
+    title: "Arknights Calendar",
+    description: "Calendar with predicted future event dates",
+    url: "https://ak.jaywye.ee/calendar",
+    category: "Planning Tools"
+  },
+  {
+    title: "Map.ARK - Stage planner",
+    description: "Stage planning tool with enemy spawn timers, stats and pathing",
+    url: "https://map.ark-nights.com/areas",
+    category: "Planning Tools"
+  },
+  {
+    title: "Tomimi - IS and CC Map Information",
+    description: "Map information with modifiers by xiiao#0613",
+    url: "https://tomimi.dev/en",
+    category: "Planning Tools"
+  },
+  {
+    title: "Pull Calculator Spreadsheet",
+    description: "Gacha pull probability calculator by u/lhc987",
+    url: "https://docs.google.com/spreadsheets/d/12nugJxtTLFafudEJ_NrFuEm2X4VHrfCRkbyzMxia63A/edit#gid=1221900186",
+    category: "Planning Tools"
+  },
+  {
+    title: "Arknemy - Enemy database",
+    description: "Enemy database (not updated beyond Chapter 12 enemies)",
+    url: "https://arknemy.github.io/enemy",
+    category: "Wiki Resources"
+  },
+  {
+    title: "PRTS - CN Wiki",
+    description: "Chinese wiki (requires translation for English speakers)",
+    url: "http://prts.wiki/w/首页",
+    category: "Wiki Resources"
+  },
+  {
+    title: "Viktorlab - DPS calculator",
+    description: "DPS calculator (not updated since Jessica Alter event, requires Chinese translation)",
+    url: "https://viktorlab.cn/akdata/dps/",
+    category: "Planning Tools"
+  },
+  {
+    title: "Arknights Official/Fan Term Glossary",
+    description: "Comprehensive glossary of Arknights terms by @drago",
+    url: "https://bit.ly/3PDCxm7",
+    category: "Reference"
+  }
+];
+---
+
+<Layout title="Various Utilities - Arknights Resource Hub">
+  <h1>Various Utilities</h1>
+  <p class="page-description">Essential tools and resources for Arknights players</p>
+
+  <CategorySection id="planning-tools" title="Planning & Database Tools">
+    {utilities.filter(u => u.category === "Planning Tools").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="wiki-resources" title="Wiki Resources">
+    {utilities.filter(u => u.category === "Wiki Resources").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="reference" title="Reference Materials">
+    {utilities.filter(u => u.category === "Reference").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+</Layout>

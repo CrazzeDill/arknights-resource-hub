@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategorySection from '../components/CategorySection.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+
+const infoSheets = [
+  {
+    title: "Arknights Farming Sheet (Moe's Sheet)",
+    description: "Comprehensive farming guide maintained by PeterYR (formerly by Moe#2568)",
+    url: "https://docs.google.com/spreadsheets/d/1RRiTIYVUNUf-xW8ljAJdYEOuSo23lpjHkPa0-zuC_4k/htmlview",
+    category: "Info Sheets"
+  },
+  {
+    title: "Resource Maths",
+    description: "Calculations by ScifiGemini0616#3863 and patarandaya#4689",
+    url: "https://bit.ly/38Ir04w",
+    category: "Info Sheets"
+  }
+];
+
+const infographics = [
+  {
+    title: "Recommended Farming Stages",
+    description: "Visual guide showing optimal farming stages based on Moe's Sheet data",
+    url: "https://i.imgur.com/fZvFuFK.png",
+    category: "Infographics",
+    isImage: true
+  },
+  {
+    title: "Free Enhancement Packs Info",
+    description: "Information on free enhancement packs availability",
+    url: "https://i.imgur.com/pD50BHs.png",
+    category: "Infographics",
+    isImage: true
+  },
+  {
+    title: "Pro Enhancement Packs Info",
+    description: "Information on premium enhancement packs",
+    url: "https://i.imgur.com/k2rtbHR.png",
+    category: "Infographics",
+    isImage: true
+  },
+  {
+    title: "Best in Slot Mastery Trainers",
+    description: "Guide to optimal mastery trainers for each skill type",
+    url: "https://i.imgur.com/ws2j120.png",
+    category: "Infographics",
+    isImage: true
+  }
+];
+---
+
+<Layout title="Efficiency & Optimization - Arknights Resource Hub">
+  <h1>Efficiency & Optimization Resources</h1>
+  <p class="page-description">Resources for maximizing your resource gathering and progression</p>
+
+  <CategorySection id="info-sheets" title="Info Sheets and Resources">
+    {infoSheets.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="infographics" title="Infographics" description="Visual guides for quick reference">
+    {infographics.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+        isImage={resource.isImage}
+      />
+    ))}
+  </CategorySection>
+</Layout>

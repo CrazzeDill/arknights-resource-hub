@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategorySection from '../components/CategorySection.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+
+const writtenGuides = [
+  {
+    title: "Arknights Beginner's Guide - Best Starting Operators",
+    description: "Guide covering the best starting operators for new players",
+    url: "https://www.ldplayer.net/blog/arknights-beginner-guide.html",
+    category: "Beginner Guides"
+  },
+  {
+    title: "Notable Early Investment 4* Operators",
+    description: "Guide to valuable 4-star operators for early game investment",
+    url: "https://docs.google.com/document/d/1BW9cHUhjSCg-nN5RsMGtZIBG7agvHOPI7Hj6zc-_eZw",
+    category: "Operator Guides"
+  },
+  {
+    title: "Mechanics List",
+    description: "Comprehensive list of game mechanics by Meowdolf Kitler#6733, mat#0069 and LJamesM#3381",
+    url: "https://bit.ly/AKMechanics",
+    category: "Game Mechanics"
+  },
+  {
+    title: "Module Ratings",
+    description: "Operator module ratings and reviews by DragonGJY#0634",
+    url: "https://docs.google.com/spreadsheets/d/1A0_0XTAcDDtHkvyAwjTqEEzM8cf5h3E60u23ZVXw4eg/edit#gid=0",
+    category: "Module Guides"
+  },
+  {
+    title: "Reclamation Algorithm Written Guide",
+    description: "Comprehensive guide to the Reclamation Algorithm event",
+    url: "https://docs.google.com/document/d/1eLf7uCjqsLLZtDIPzNKwreDEIWBYDMwfBmAMUeyKV7I/edit?usp=sharing",
+    category: "Event Guides"
+  },
+  {
+    title: "Reclamation Algorithm Video Guide",
+    description: "Video guide to the Reclamation Algorithm event by DoctorSockrates",
+    url: "https://youtu.be/Q3GRVHqg0EE?si=-ifvnNYBhPYpmoR9",
+    category: "Event Guides"
+  },
+  {
+    title: "Operator Trust Accumulation",
+    description: "Infographic showing trust percentage requirements (1 Sanity = 1 Trust Point)",
+    url: "https://cdn.discordapp.com/attachments/944556086583787580/1370759185796698152/ArknightsTrustPercentageTable.png",
+    category: "Progression",
+    isImage: true
+  }
+];
+---
+
+<Layout title="Written Guides - Arknights Resource Hub">
+  <h1>Written Guides & Miscellaneous Info</h1>
+  <p class="page-description">Comprehensive written resources for Arknights players</p>
+
+  <CategorySection id="beginner-guides" title="Beginner Guides">
+    {writtenGuides.filter(g => g.category === "Beginner Guides").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="operator-guides" title="Operator Guides">
+    {writtenGuides.filter(g => g.category === "Operator Guides").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="game-mechanics" title="Game Mechanics">
+    {writtenGuides.filter(g => g.category === "Game Mechanics").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="module-guides" title="Module Guides">
+    {writtenGuides.filter(g => g.category === "Module Guides").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="event-guides" title="Event Guides">
+    {writtenGuides.filter(g => g.category === "Event Guides").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="progression" title="Progression">
+    {writtenGuides.filter(g => g.category === "Progression").map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+        isImage={resource.isImage}
+      />
+    ))}
+  </CategorySection>
+</Layout>

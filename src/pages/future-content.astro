@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategorySection from '../components/CategorySection.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+
+// From the knowledge base, we can see upcoming events
+const upcomingEvents = [
+  {
+    cnDate: "March 7, 2025 – March 21, 2025",
+    description: "Upcoming event scheduled for March 2025 in CN server"
+  },
+  {
+    cnDate: "March 20, 2025 – April 10, 2025",
+    description: "Upcoming event scheduled for late March 2025 in CN server"
+  },
+  {
+    cnDate: "April 7, 2025 – April 21, 2025",
+    description: "Upcoming event scheduled for early April 2025 in CN server"
+  },
+  {
+    cnDate: "May 1, 2025 – May 22, 2025",
+    description: "Arknights CN's 6th Anniversary event",
+    globalDate: "Mid/late October 2025 (as the 2025 2nd Celebration event)"
+  },
+  {
+    cnDate: "August 2, 2025 – August 23, 2025",
+    description: "Summer 2025 event",
+    globalDate: "Around January 16, 2026 (as Arknights Global's 6th Anniversary event)"
+  }
+];
+
+const banners = [
+  {
+    title: "Future Banner from CN",
+    description: "Upcoming operator banners from CN server",
+    url: "https://arknights.wiki.gg/wiki/Headhunting/Banners/Upcoming",
+    category: "Banners"
+  },
+  {
+    title: "Future Skins Overview",
+    description: "Predicted upcoming skins by shirra and others",
+    url: "https://bit.ly/3t15Zcc",
+    category: "Banners"
+  }
+];
+
+const events = [
+  {
+    title: "Future Events from CN",
+    description: "Upcoming events from CN server with projected Global release dates",
+    url: "https://arknights.wiki.gg/wiki/Event/Upcoming",
+    category: "Events"
+  }
+];
+
+const skins = [
+  {
+    title: "Future Skins Overview",
+    description: "Predicted upcoming skins by shirra and others",
+    url: "https://bit.ly/3t15Zcc",
+    category: "Skins"
+  },
+  {
+    title: "Future Skins Infographic",
+    description: "Visual guide to upcoming skins",
+    url: "https://imgur.com/SASzOXx",
+    category: "Skins",
+    isImage: true
+  },
+  {
+    title: "Fashion Review Skins Overview",
+    description: "Predicted upcoming Fashion Review skins",
+    url: "https://imgur.com/l3WyeFG",
+    category: "Skins",
+    isImage: true
+  }
+];
+
+const farming = [
+  {
+    title: "Future Farming Stages",
+    description: "Predicted farming stages for upcoming events",
+    url: "http://bit.ly/3iYnYyo",
+    category: "Farming"
+  },
+  {
+    title: "Future Farming Stages Infographic",
+    description: "Visual guide to upcoming farming stages",
+    url: "https://imgur.com/99BmW0a",
+    category: "Farming",
+    isImage: true
+  }
+];
+
+const modules = [
+  {
+    title: "Upcoming Module Timeline",
+    description: "Projected timeline for upcoming operator modules",
+    url: "https://imgur.com/SS2JF5z",
+    category: "Modules",
+    isImage: true
+  },
+  {
+    title: "Module Overview",
+    description: "Complete module information including effects, release info, and unlock conditions",
+    url: "https://bit.ly/AKModules",
+    category: "Modules"
+  }
+];
+---
+
+<Layout title="Future Content - Arknights Resource Hub">
+  <h1>Future Content Resources</h1>
+  <p class="page-description">Predictions and information about upcoming Arknights content</p>
+
+  <CategorySection id="banners" title="Informational Sheets and Guides" description="Predicted upcoming banners and operator releases">
+    {banners.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="events" title="Upcoming Events" description="Events coming to the Global server based on CN releases">
+    {upcomingEvents.map(event => (
+      <div class="event-card">
+        <h3>CN Event: {event.cnDate}</h3>
+        <p>{event.description}</p>
+        {event.globalDate && <p class="event-global-date"><strong>Global release:</strong> {event.globalDate}</p>}
+      </div>
+    ))}
+    
+    {events.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="skins" title="Skins Information" description="Predicted upcoming operator skins">
+    {skins.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+        isImage={resource.isImage}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="farming" title="Farming Information" description="Predicted farming stages for upcoming events">
+    {farming.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+        isImage={resource.isImage}
+      />
+    ))}
+  </CategorySection>
+
+  <CategorySection id="modules" title="Module Information" description="Information about upcoming operator modules">
+    {modules.map(resource => (
+      <ResourceCard 
+        title={resource.title}
+        description={resource.description}
+        url={resource.url}
+        category={resource.category}
+        isImage={resource.isImage}
+      />
+    ))}
+  </CategorySection>
+</Layout>

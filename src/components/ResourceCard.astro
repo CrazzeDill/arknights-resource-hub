@@ -1,0 +1,27 @@
+---
+// Resource card component
+export interface Props {
+  title: string;
+  description: string;
+  url: string;
+  category?: string;
+  isImage?: boolean;
+}
+
+const { title, description, url, category, isImage = false } = Astro.props;
+---
+
+<div class="resource-card">
+  <div class="resource-card-header">
+    {category && <span class="resource-category">{category}</span>}
+    <h3>{title}</h3>
+  </div>
+  <div class="resource-card-body">
+    <p>{description}</p>
+  </div>
+  <div class="resource-card-footer">
+    <a href={url} class={`resource-link ${isImage ? 'image-link' : ''}`} target="_blank" rel="noopener noreferrer">
+      {isImage ? 'View Image' : 'Visit Resource'}
+    </a>
+  </div>
+</div>
