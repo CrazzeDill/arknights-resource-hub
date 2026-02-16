@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#121212;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e1e1e;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="cardClip">
+      <rect x="0" y="0" width="300" height="200" rx="8" ry="8"/>
+    </clipPath>
+  </defs>
+  
+  <rect width="300" height="200" fill="url(#bgGradient)" rx="8" ry="8"/>
+  
+  <!-- Arknights-inspired design elements -->
+  <g clip-path="url(#cardClip)">
+    <!-- Diagonal lines -->
+    <line x1="-50" y1="50" x2="100" y2="-100" stroke="#d32f2f" stroke-width="2" stroke-opacity="0.3"/>
+    <line x1="0" y1="100" x2="150" y2="-50" stroke="#d32f2f" stroke-width="2" stroke-opacity="0.3"/>
+    <line x1="50" y1="150" x2="200" y2="0" stroke="#d32f2f" stroke-width="2" stroke-opacity="0.3"/>
+    <line x1="100" y1="200" x2="250" y2="50" stroke="#d32f2f" stroke-width="2" stroke-opacity="0.3"/>
+    <line x1="150" y1="250" x2="300" y2="100" stroke="#d32f2f" stroke-width="2" stroke-opacity="0.3"/>
+    
+    <!-- Arknights symbol -->
+    <g transform="translate(150,100) scale(3)">
+      <!-- Black outline -->
+      <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
+            fill="none" stroke="black" stroke-width="0.5"/>
+      <!-- White outline -->
+      <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
+            fill="none" stroke="white" stroke-width="0.3"/>
+      <!-- Red fill -->
+      <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
+            fill="#d32f2f" opacity="0.7"/>
+    </g>
+    
+    <!-- Text placeholder -->
+    <text x="150" y="180" text-anchor="middle" fill="#a0a0a0" font-family="Arial" font-size="14" opacity="0.7">Thumbnail Preview</text>
+  </g>
+</svg>
