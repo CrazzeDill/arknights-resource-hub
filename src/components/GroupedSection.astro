@@ -1,0 +1,68 @@
+---
+// GroupedSection: renders a top-level CategorySection containing multiple subsection CategorySections
+import CategorySection from './CategorySection.astro';
+
+export interface SubItem {
+  title: string;
+  description?: string;
+  link?: string;
+  isImage?: boolean;
+}
+
+export interface SubSection {
+  id: string;
+  title: string;
+  description?: string;
+  items: SubItem[];
+}
+
+export interface Props {
+  id: string;
+  title: string;
+  description?: string;
+  subsections: SubSection[];
+  open?: boolean;
+}
+
+const { id, title, description, subsections = [], open = false } = Astro.props;
+
+function getButtonLabel(link?: string) {
+  if (!link) return 'Open resource';
+  const l = link.toLowerCase();
+  if (l.includes('docs.google.com') && l.includes('spreadsheets')) return 'Open Google Spreadsheet';
+  if (l.includes('docs.google.com') && l.includes('document')) return 'Open Google Docs';
+  return 'Open website';
+}
+
+function getButtonClass(link?: string) {
+  if (!link) return '';
+  const l = link.toLowerCase();
+  if (l.includes('docs.google.com') && l.includes('spreadsheets')) return 'spreadsheet';
+  if (l.includes('docs.google.com') && l.includes('document')) return 'docs';
+  return '';
+}
+---
+
+<CategorySection id={id} title={title} description={description} collapsible open={open}>
+  {subsections.map(section => (
+    <CategorySection id={section.id} title={section.title} description={section.description} collapsible>
+      <div class="simple-list">
+        {section.items.map(item => (
+          <article class="simple-resource">
+            <h3 class="simple-title">{item.title}</h3>
+            {item.description && <p class="simple-desc">{item.description}</p>}
+            {item.isImage ? (
+              <p>
+                <a href={item.link} class="image-link" target="_blank" rel="noopener noreferrer">
+                  <img src={item.link} alt={item.title} style="width:100%;border-radius:6px;margin-top:0.5rem;" />
+                </a>
+              </p>
+            ) : (
+              item.link && <p><a href={item.link} class={`resource-button ${getButtonClass(item.link)}`} target="_blank" rel="noopener noreferrer">{getButtonLabel(item.link)}</a></p>
+            )}
+          </article>
+        ))}
+      </div>
+    </CategorySection>
+  ))}
+</CategorySection>

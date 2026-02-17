@@ -1,48 +1,111 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CategorySection from '../components/CategorySection.astro';
-import ResourceCard from '../components/ResourceCard.astro';
+import GroupedSection from '../components/GroupedSection.astro';
 
-const baseResources = [
+// Inlined detailed data from page sections so index shows content directly
+const workers = [
   {
-    id: "base-workers",
-    title: "Base-Related Resource: Workers",
-    description: "Base teams, combos, and worker efficiency guides",
-    link: "/base-resources#workers"
+    title: "Base Teams and Combos Guide",
+    description: "Comprehensive guide by phlegyas#7344 and blackgatoacer covering base teams and combos",
+    link: "https://docs.google.com/spreadsheets/d/1zYc2JU46X0XWmV7s1503bN4feRdOMa1eehrTQ2jGaiE/edit?usp=sharing"
   },
   {
-    id: "base-layout",
-    title: "Base-Related Resource: Layout and Efficiency",
-    description: "Base layout guides, orundum farming, and facility mechanics",
-    link: "/base-resources#layout-efficiency"
+    title: "Base Combo cheat sheet",
+    description: "Quick reference guide by Shlhu#4805 for base worker combos",
+    link: "https://docs.google.com/spreadsheets/d/1unxiDfT8kvJzwDf-xqCb1wPohkVPsX4-cgl37_6cRjQ/edit#gid=1374380275"
   },
   {
-    id: "base-infographics",
-    title: "Base-Related Resource: Infographics",
-    description: "Visual guides for base combos and low rarity investments",
-    link: "/base-resources#infographics"
+    title: "Good Low Rarity Investment Guide",
+    description: "Guide by Forge, Neia#6681 and others on valuable low-rarity operators for base investment",
+    link: "https://docs.google.com/spreadsheets/d/1MAvUMeuC0BkF5Hu1s3xM7Zmn2HahZZlinchSHnKqjXk/edit#gid=75208859"
   }
 ];
 
-const futureContent = [
+const layoutEfficiency = [
   {
-    id: "future-banners",
-    title: "Future Content: Banner Information",
-    description: "Upcoming operator banners from CN server",
-    link: "/future-content#banners"
+    title: "80 Second Economics - Base-Related Video Guides",
+    description: "Video guides by cube#1588 covering base layout efficiency (last updated August 23, 2020)",
+    link: "https://www.youtube.com/watch?v=eolMMsRn794"
   },
   {
-    id: "future-events",
-    title: "Future Content: Event Information",
-    description: "Upcoming events from CN server with projected Global release dates",
-    link: "/future-content#events"
+    title: "Orundum Farming Guide",
+    description: "Guide by Malicast#8591 on efficient orundum farming while maintaining game progress",
+    link: "https://docs.google.com/document/d/1mXML196voUUGswEyn3D-NCALqOEpvajWKiYZXBiYmJ4/edit"
   },
   {
-    id: "future-skins",
-    title: "Future Content: Skins Overview",
-    description: "Predicted upcoming skins and Fashion Review items",
-    link: "/future-content#skins"
+    title: "Base Facilities and Mechanics Info",
+    description: "Information on base facilities mechanics by cube#1588 (no update since August 23, 2020)",
+    link: "https://drive.google.com/file/d/1_otUfbyVHmGtYItmHqLgMXuhlDpM9dKG/view?usp=sharing"
   }
+];
+
+const baseInfographics = [
+  {
+    title: "Shlhu's Base Combos",
+    description: "Infographic showing effective base worker combos",
+    link: "https://i.imgur.com/xbM3thT.png",
+    isImage: true
+  },
+  {
+    title: "Low Rarity Base Investment Guide",
+    description: "Infographic showing valuable low-rarity operators for base investment",
+    link: "https://i.imgur.com/28T70G8.png",
+    isImage: true
+  }
+];
+
+const banners = [
+  {
+    title: "Future Banner Reference",
+    description: "Upcoming operator banners from CN server",
+    link: "https://arknights.wiki.gg/wiki/Headhunting/Banners/Upcoming"
+  },
+  {
+    title: "Future Skins Sheet",
+    description: "Predicted upcoming skins by crowd-sourced sheets",
+    link: "https://docs.google.com/spreadsheets/d/1UIZNZxVPeTOHkNmVUciSXLz3dlLr4u5309e-I4En_-4/edit#gid=0"
+  }
+];
+
+const upcomingEvents = [
+  { cnDate: "March 7, 2025 – March 21, 2025", description: "Upcoming event scheduled for March 2025 in CN server" },
+  { cnDate: "March 20, 2025 – April 10, 2025", description: "Upcoming event scheduled for late March 2025 in CN server" },
+  { cnDate: "April 7, 2025 – April 21, 2025", description: "Upcoming event scheduled for early April 2025 in CN server" },
+  { cnDate: "May 1, 2025 – May 22, 2025", description: "Arknights CN's 6th Anniversary event", globalDate: "Mid/late October 2025 (as the 2025 2nd Celebration event)" },
+  { cnDate: "August 2, 2025 – August 23, 2025", description: "Summer 2025 event", globalDate: "Around January 16, 2026 (as Arknights Global's 6th Anniversary event)" }
+];
+
+const skins = [
+  { title: "Future Skins Overview", description: "Predicted upcoming skins by shirra and others", link: "https://docs.google.com/spreadsheets/d/1UIZNZxVPeTOHkNmVUciSXLz3dlLr4u5309e-I4En_-4/edit#gid=0", isImage: false },
+  { title: "Future Skins Infographic", description: "Visual guide to upcoming skins", link: "https://i.imgur.com/SASzOXx.png", isImage: true }
+];
+
+const farmingFuture = [
+  { title: "Future Farming Stages", description: "Predicted farming stages for upcoming events", link: "https://docs.google.com/spreadsheets/d/1XGRj_djOlAkKnhCjeXn-Xz8uV-OD73v1UQ0LIEHfM2w/" },
+  { title: "Future Farming Stages Infographic", description: "Visual guide to upcoming farming stages", link: "https://i.imgur.com/99BmW0a.png", isImage: true }
+];
+
+const modules = [
+  { title: "Upcoming Module Timeline", description: "Projected timeline for upcoming operator modules", link: "https://i.imgur.com/SS2JF5z.png", isImage: true },
+  { title: "Module Overview", description: "Complete module information including effects, release info, and unlock conditions", link: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTA6I0ffKjIubfoxd3GedgVScdQ2G90EFSlHzADsNP7nk5nXa8BNyW3beeUS8WD6UXRu8EfV3bBSoRI/pubhtml" }
+];
+
+const infoSheets = [
+  { title: "Arknights Farming Sheet (Moe's Sheet)", description: "Comprehensive farming guide maintained by PeterYR", link: "https://docs.google.com/spreadsheets/d/1RRiTIYVUNUf-xW8ljAJdYEOuSo23lpjHkPa0-zuC_4k/htmlview" },
+  { title: "Resource Maths", description: "Calculations by community contributors", link: "https://docs.google.com/spreadsheets/d/1xXm-FGi63jJdxVYzwiYKwjcN8q0X7ZgKeHhgaoyklmI/preview#gid=139756758" }
+];
+
+const efficiencyInfographics = [
+  { title: "Recommended Farming Stages", description: "Visual guide showing optimal farming stages", link: "https://i.imgur.com/fZvFuFK.png", isImage: true },
+  { title: "Free Enhancement Packs Info", description: "Information on free enhancement packs availability", link: "https://i.imgur.com/pD50BHs.png", isImage: true }
+];
+
+const utilities = [
+  { title: "Aceship - Unit databases, calculators and planner", description: "Comprehensive database and planning tools", link: "https://puppiizsunniiz.github.io/AN-EN-Tags/index.html", category: "Planning" },
+  { title: "Krooster - Roster sharing tool", description: "Roster management and planning tool", link: "https://www.krooster.com/", category: "Planning" },
+  { title: "Penguin Stats - Drop rates and planner", description: "Drop rate statistics and material planning", link: "https://penguin-stats.io/", category: "Planning" },
+  { title: "Arknights Wiki", description: "Comprehensive wiki covering stages, lore, events, mechanics and operators", link: "https://arknights.wiki.gg/wiki/Arknights_Terra_Wiki", category: "Wiki" },
+  { title: "Module Overview", description: "Complete information on module effects, release information, and unlock conditions", link: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTA6I0ffKjIubfoxd3GedgVScdQ2G90EFSlHzADsNP7nk5nXa8BNyW3beeUS8WD6UXRu8EfV3bBSoRI/pubhtml", category: "Wiki" }
 ];
 
 const lastUpdated = "February 16, 2026";
@@ -62,50 +125,82 @@ const lastUpdated = "February 16, 2026";
       <p>Discover comprehensive guides, tools, and resources to enhance your gameplay</p>
     </div>
   </section>
+  <div class="page-layout">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <h4>Quick Navigation</h4>
+        <ul>
+          <li class="nav-group">
+            <strong>Base</strong>
+            <ul>
+              <li><a href="#workers" data-parent="base">Workers</a></li>
+              <li><a href="#layout-efficiency" data-parent="base">Layout & Efficiency</a></li>
+              <li><a href="#infographics" data-parent="base">Infographics</a></li>
+            </ul>
+          </li>
+          <li class="nav-group">
+            <strong>Future</strong>
+            <ul>
+              <li><a href="#banners" data-parent="future">Banners & Sheets</a></li>
+              <li><a href="#events" data-parent="future">Events</a></li>
+              <li><a href="#skins" data-parent="future">Skins</a></li>
+              <li><a href="#farming" data-parent="future">Farming</a></li>
+              <li><a href="#modules" data-parent="future">Modules</a></li>
+            </ul>
+          </li>
+          <li class="nav-group">
+            <strong>Efficiency</strong>
+            <ul>
+              <li><a href="#info-sheets" data-parent="efficiency">Info Sheets</a></li>
+              <li><a href="#infographics-eff" data-parent="efficiency">Infographics</a></li>
+            </ul>
+          </li>
+          <li class="nav-group">
+            <strong>Utilities</strong>
+            <ul>
+              <li><a href="#planning-tools" data-parent="utilities">Planning Tools</a></li>
+              <li><a href="#wiki-resources" data-parent="utilities">Wiki</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-  <CategorySection id="base-resources" title="Base-Related Resources">
-    {baseResources.map(resource => (
-      <ResourceCard 
-        title={resource.title}
-        description={resource.description}
-        url={resource.link}
-      />
-    ))}
-  </CategorySection>
+      <div class="content-main">
+        {(() => {
+          const baseSubsections = [
+            { id: 'workers', title: 'Workers', description: 'Guides and resources for effective worker team compositions', items: workers },
+            { id: 'layout-efficiency', title: 'Layout and Efficiency', description: 'Resources for base layout planning and resource efficiency', items: layoutEfficiency },
+            { id: 'infographics', title: 'Infographics', description: 'Visual guides for quick reference', items: baseInfographics }
+          ];
 
-  <CategorySection id="future-content" title="Future Content">
-    {futureContent.map(resource => (
-      <ResourceCard 
-        title={resource.title}
-        description={resource.description}
-        url={resource.link}
-      />
-    ))}
-  </CategorySection>
+          const futureSubsections = [
+            { id: 'banners', title: 'Informational Sheets and Guides', description: 'Predicted upcoming banners and operator releases', items: banners },
+            { id: 'events', title: 'Upcoming Events', description: 'Events coming to the Global server based on CN releases', items: upcomingEvents.map(e => ({ title: `CN Event: ${e.cnDate}`, description: e.description, link: e.globalDate ? undefined : undefined })) },
+            { id: 'skins', title: 'Skins Information', description: 'Predicted upcoming operator skins', items: skins },
+            { id: 'farming', title: 'Farming Information', description: 'Predicted farming stages for upcoming events', items: farmingFuture },
+            { id: 'modules', title: 'Module Information', description: 'Information about upcoming operator modules', items: modules }
+          ];
 
-  <CategorySection id="efficiency" title="Efficiency & Optimization">
-    <ResourceCard 
-      title="Farming Guides & Resources"
-      description="Moe's Sheet, resource math calculations, and recommended farming stages"
-      url="/efficiency"
-    />
-    <ResourceCard 
-      title="Enhancement Packs & Mastery Training"
-      description="Information on free/pro enhancement packs and best mastery trainers"
-      url="/efficiency#enhancement"
-    />
-  </CategorySection>
+          const efficiencySubsections = [
+            { id: 'info-sheets', title: 'Info Sheets and Resources', description: 'Farming and resource maths sheets', items: infoSheets },
+            { id: 'infographics-eff', title: 'Infographics', description: 'Visual efficiency guides', items: efficiencyInfographics }
+          ];
 
-  <CategorySection id="utilities" title="Various Utilities">
-    <ResourceCard 
-      title="Planning & Database Tools"
-      description="Aceship, Krooster, Penguin Stats, and other essential tools"
-      url="/utilities"
-    />
-    <ResourceCard 
-      title="Wiki Resources"
-      description="Arknights Wiki, PRTS, and module overview information"
-      url="/utilities#wiki"
-    />
-  </CategorySection>
+          const utilitiesSubsections = [
+            { id: 'planning-tools', title: 'Planning & Database Tools', items: utilities.filter(u => u.category === 'Planning') },
+            { id: 'wiki-resources', title: 'Wiki Resources', items: utilities.filter(u => u.category === 'Wiki') }
+          ];
+
+          return (
+            <>
+              <GroupedSection id="base" title="Base Resources" description="Base-related subsections" subsections={baseSubsections} open />
+              <GroupedSection id="future" title="Future Content" description="Predictions and info about upcoming content" subsections={futureSubsections} />
+              <GroupedSection id="efficiency" title="Efficiency & Optimization" description="Resources for maximizing your resource gathering and progression" subsections={efficiencySubsections} />
+              <GroupedSection id="utilities" title="Various Utilities" description="Essential tools and resources for Arknights players" subsections={utilitiesSubsections} />
+            </>
+          );
+        })()}
+      </div>
+  </div>
 </Layout>
