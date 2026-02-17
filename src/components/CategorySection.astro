@@ -4,15 +4,32 @@ export interface Props {
   title: string;
   id: string;
   description?: string;
+  collapsible?: boolean;
+  open?: boolean;
 }
 
 const { title, id, description } = Astro.props;
+const { collapsible = false, open = true } = Astro.props;
 ---
 
-<section id={id} class="category-section">
-  <h2 class="category-title">{title}</h2>
-  {description && <p class="category-description">{description}</p>}
-  <div class="resources-grid">
-    <slot />
-  </div>
-</section>
+{collapsible ? (
+  <section id={id} class="category-section">
+    <details class="category-details" open={open}>
+      <summary class="category-summary">
+        <h2 class="category-title">{title}</h2>
+        {description && <p class="category-description">{description}</p>}
+      </summary>
+      <div class="resources-grid">
+        <slot />
+      </div>
+    </details>
+  </section>
+) : (
+  <section id={id} class="category-section">
+    <h2 class="category-title">{title}</h2>
+    {description && <p class="category-description">{description}</p>}
+    <div class="resources-grid">
+      <slot />
+    </div>
+  </section>
+)}

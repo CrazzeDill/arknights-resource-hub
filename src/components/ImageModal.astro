@@ -1,0 +1,301 @@
+---
+---
+
+<div id="__img-modal-overlay" class="__img-modal-overlay" aria-hidden="true" style="display:none;">
+  <div class="__img-modal-content">
+    <div id="__img-modal-wrap" class="__img-modal-img-wrap">
+      <img id="__img-modal-img" alt="Full image" />
+    </div>
+  </div>
+  <button id="__img-modal-close" class="__img-modal-close" aria-label="Close image">✕</button>
+</div>
+
+<style is:global>
+.__img-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;transition:opacity .18s ease;pointer-events:none}
+.__img-modal-overlay.__visible{opacity:1;pointer-events:auto;display:flex}
+.__img-modal-content{max-width:95vw;max-height:95vh;width:95vw;height:95vh;box-shadow:0 8px 30px rgba(0,0,0,.6);overflow:hidden;display:block;position:relative}
+.__img-modal-img-wrap{display:block;touch-action:none;will-change:transform;transform-origin:0 0;position:absolute;left:0;top:0}
+.__img-modal-content img{width:auto;height:auto;max-width:none;max-height:none;display:block;border-radius:6px;object-fit:contain;transition:transform .12s ease;cursor:grab}
+.__img-modal-close{position:fixed;right:20px;top:20px;background:transparent;border:0;color:#fff;font-size:28px;cursor:pointer;padding:6px}
+</style>
+
+<script is:inline>
+(function () {
+  const overlay = document.getElementById('__img-modal-overlay');
+  const img = document.getElementById('__img-modal-img');
+  const wrap = document.getElementById('__img-modal-wrap');
+  const closeBtn = document.getElementById('__img-modal-close');
+  const content = overlay.querySelector('.__img-modal-content');
+
+  let baseWidth = 0, baseHeight = 0;
+  let baseScale = 1; // fit scale so image fits within container initially
+
+  let scale = 1; // current scale (baseScale .. baseScale * maxZoom)
+  let minScale = 1;
+  let maxScale = 4; // multiplier above baseScale
+  let startTouches = null;
+  let lastTouchDistance = null;
+  let isPanning = false;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+
+  function applyTransform() {
+    wrap.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  }
+
+  function resetTransform() {
+    scale = baseScale;
+    translateX = 0;
+    translateY = 0;
+    applyTransform();
+  }
+
+  function clampTranslate() {
+    const contentRect = content.getBoundingClientRect();
+    const sw = baseWidth * scale;
+    const sh = baseHeight * scale;
+
+    if (sw <= contentRect.width) {
+      translateX = (contentRect.width - sw) / 2;
+    } else {
+      const minX = contentRect.width - sw;
+      if (translateX > 0) translateX = 0;
+      if (translateX < minX) translateX = minX;
+    }
+
+    if (sh <= contentRect.height) {
+      translateY = (contentRect.height - sh) / 2;
+    } else {
+      const minY = contentRect.height - sh;
+      if (translateY > 0) translateY = 0;
+      if (translateY < minY) translateY = minY;
+    }
+
+    applyTransform();
+  }
+
+  function hide() {
+    overlay.classList.remove('__visible');
+    overlay.setAttribute('aria-hidden', 'true');
+    img.src = '';
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    resetTransform();
+    setTimeout(() => {
+      if (!overlay.classList.contains('__visible')) overlay.style.display = 'none';
+    }, 200);
+  }
+
+  function show(src) {
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('__visible'));
+    overlay.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    // Prefer direct high-res Imgur links when possible, and preload the image
+    const normalized = normalizeUrl(src);
+    const finalUrl = getDirectImgur(normalized);
+    resetTransform();
+    const preload = new Image();
+    preload.crossOrigin = 'anonymous';
+    preload.onload = () => {
+      const natW = preload.naturalWidth || preload.width;
+      const natH = preload.naturalHeight || preload.height;
+      // store natural sizes for when the main img loads
+      img.__preloadedNat = { natW, natH };
+      img.src = finalUrl;
+    };
+    preload.onerror = () => {
+      img.src = normalized;
+    };
+    preload.src = finalUrl;
+  }
+
+  img.addEventListener('load', () => {
+    // use the preloaded natural size when available, otherwise the image's natural size
+    const natW = (img.__preloadedNat && img.__preloadedNat.natW) || img.naturalWidth || img.width;
+    const natH = (img.__preloadedNat && img.__preloadedNat.natH) || img.naturalHeight || img.height;
+    // clear temporary preloaded info
+    if (img.__preloadedNat) delete img.__preloadedNat;
+    baseWidth = natW;
+    baseHeight = natH;
+    // ensure the img element uses its natural pixel size (we'll scale via the wrapper)
+    img.style.width = baseWidth + 'px';
+    img.style.height = baseHeight + 'px';
+
+    const contentRect = content.getBoundingClientRect();
+    // fitScale ensures the whole image fits within modal initially
+    const fitScale = Math.min(contentRect.width / baseWidth, contentRect.height / baseHeight, 1);
+    baseScale = fitScale;
+    minScale = baseScale;
+    // allow up to 4x above baseScale but at least 1x (native resolution)
+    maxScale = Math.max(1, baseScale * 4);
+
+    scale = baseScale;
+    // center image initially (translate to center of container)
+    translateX = (contentRect.width - baseWidth * scale) / 2;
+    translateY = (contentRect.height - baseHeight * scale) / 2;
+    clampTranslate();
+  });
+
+  function normalizeUrl(url) {
+    if (!url) return url;
+    if (/^https?:\/\//i.test(url)) return url;
+    return 'https://' + url;
+  }
+
+  function getDirectImgur(url) {
+    try {
+      const u = new URL(url);
+      // If it's already i.imgur.com and has an extension, return as-is
+      if (u.hostname.match(/(^|\.)i\.imgur\.com$/i) && /\.\w{3,4}(?:$|\?)/.test(u.pathname)) return url;
+      // If it's imgur.com with a path like /abcd or /gallery/abcd, convert to i.imgur.com/abcd.jpg
+      if (u.hostname.match(/(^|\.)imgur\.com$/i)) {
+        const parts = u.pathname.split('/').filter(Boolean);
+        const id = parts.pop();
+        if (!id) return url;
+        return 'https://i.imgur.com/' + id + '.jpg';
+      }
+    } catch (e) {
+      return url;
+    }
+    return url;
+  }
+
+  function isImgur(url) {
+    if (!url) return false;
+    return /(^|\.)imgur\.com/i.test(url);
+  }
+
+  document.body.addEventListener(
+    'click',
+    (ev) => {
+      const a = ev.target.closest && ev.target.closest('a.image-link');
+      if (!a) return;
+      const href = a.getAttribute('href') || a.dataset.src;
+      if (!href) return;
+      if (isImgur(href)) {
+        ev.preventDefault();
+        const full = normalizeUrl(href);
+        show(full);
+      }
+    },
+    false,
+  );
+
+  // Close handlers
+  overlay.addEventListener('click', (ev) => {
+    if (ev.target === overlay || ev.target === closeBtn) hide();
+  });
+  closeBtn.addEventListener('click', hide);
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') hide(); });
+
+  // Wheel zoom (desktop) — smoother factor and precise cursor-centered zoom
+  function zoomAt(screenX, screenY, newScale) {
+    const contentRect = content.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    // cursor relative to image's current top-left
+    const cx = screenX - imgRect.left;
+    const cy = screenY - imgRect.top;
+    const ratio = newScale / scale;
+    // compute new translate keeping the point under cursor stationary (using current translate)
+    translateX = translateX * ratio + cx * (1 - ratio);
+    translateY = translateY * ratio + cy * (1 - ratio);
+    scale = newScale;
+    clampTranslate();
+  }
+
+  img.addEventListener('wheel', (ev) => {
+    if (!overlay.classList.contains('__visible')) return;
+    ev.preventDefault();
+    const factor = Math.exp(-ev.deltaY * 0.0015);
+    const newScale = Math.max(minScale, Math.min(maxScale, scale * factor));
+    zoomAt(ev.clientX, ev.clientY, newScale);
+  }, { passive: false });
+
+  // Double click to toggle (centered on cursor)
+  img.addEventListener('dblclick', (ev) => {
+    if (scale > 1) {
+      resetTransform();
+    } else {
+      const target = Math.min(maxScale, 2);
+      zoomAt(ev.clientX, ev.clientY, target);
+    }
+  });
+
+  // Mouse drag pan
+  // Mouse drag pan
+  img.addEventListener('mousedown', (ev) => {
+    const contentRect = content.getBoundingClientRect();
+    const baseW = baseWidth * scale;
+    const baseH = baseHeight * scale;
+    const pannable = baseW > contentRect.width || baseH > contentRect.height;
+    if (!pannable) return;
+    isPanning = true;
+    startX = ev.clientX - translateX;
+    startY = ev.clientY - translateY;
+    img.style.cursor = 'grabbing';
+    ev.preventDefault();
+  });
+  document.addEventListener('mousemove', (ev) => {
+    if (!isPanning) return;
+    translateX = ev.clientX - startX;
+    translateY = ev.clientY - startY;
+    clampTranslate();
+  });
+  document.addEventListener('mouseup', () => { if (isPanning) { isPanning = false; img.style.cursor = 'grab'; } });
+
+  // Touch: pinch to zoom & pan
+  img.addEventListener('touchstart', (ev) => {
+    if (!overlay.classList.contains('__visible')) return;
+    if (ev.touches.length === 2) {
+      lastTouchDistance = getDistance(ev.touches[0], ev.touches[1]);
+      const centerX = (ev.touches[0].clientX + ev.touches[1].clientX) / 2;
+      const centerY = (ev.touches[0].clientY + ev.touches[1].clientY) / 2;
+      startTouches = { centerX, centerY };
+    } else if (ev.touches.length === 1) {
+      const contentRect = content.getBoundingClientRect();
+      const baseW = baseWidth * scale;
+      const baseH = baseHeight * scale;
+      const pannable = baseW > contentRect.width || baseH > contentRect.height;
+      if (pannable) {
+        isPanning = true;
+        startX = ev.touches[0].clientX - translateX;
+        startY = ev.touches[0].clientY - translateY;
+      }
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchmove', (ev) => {
+    if (ev.touches.length === 2) {
+      ev.preventDefault();
+      const dist = getDistance(ev.touches[0], ev.touches[1]);
+      if (lastTouchDistance && startTouches) {
+        const factor = dist / lastTouchDistance;
+        const newScale = Math.max(minScale, Math.min(maxScale, scale * factor));
+        // zoom centered at midpoint of touches
+        const centerX = (ev.touches[0].clientX + ev.touches[1].clientX) / 2;
+        const centerY = (ev.touches[0].clientY + ev.touches[1].clientY) / 2;
+        zoomAt(centerX, centerY, newScale);
+      }
+      lastTouchDistance = dist;
+    } else if (ev.touches.length === 1 && isPanning) {
+      ev.preventDefault();
+      translateX = ev.touches[0].clientX - startX;
+      translateY = ev.touches[0].clientY - startY;
+      clampTranslate();
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchend', (ev) => {
+    if (ev.touches.length < 2) lastTouchDistance = null;
+    if (ev.touches.length === 0) isPanning = false;
+  });
+
+  function getDistance(a, b) {
+    const dx = a.clientX - b.clientX;
+    const dy = a.clientY - b.clientY;
+    return Math.hypot(dx, dy);
+  }
+})();
+</script>
