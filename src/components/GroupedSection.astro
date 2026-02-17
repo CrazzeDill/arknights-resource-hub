@@ -7,6 +7,30 @@ export interface SubItem {
   description?: string;
   link?: string;
   isImage?: boolean;
+  isYouTube?: boolean;
+}
+
+// Extract YouTube video ID from various YouTube URL formats
+function getYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    // Handle youtube.com/watch?v=VIDEO_ID
+    if (u.hostname.includes('youtube.com') && u.searchParams.has('v')) {
+      return u.searchParams.get('v');
+    }
+    // Handle youtu.be/VIDEO_ID
+    if (u.hostname === 'youtu.be') {
+      return u.pathname.slice(1).split('/')[0];
+    }
+    // Handle youtube.com/embed/VIDEO_ID
+    if (u.hostname.includes('youtube.com') && u.pathname.startsWith('/embed/')) {
+      return u.pathname.split('/embed/')[1]?.split('/')[0];
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }
 
 export interface SubSection {
@@ -47,7 +71,9 @@ function getButtonClass(link?: string) {
   {subsections.map(section => (
     <CategorySection id={section.id} title={section.title} description={section.description} collapsible>
       <div class="simple-list">
-        {section.items.map(item => (
+        {section.items.map(item => {
+          const youtubeId = item.isYouTube ? getYouTubeVideoId(item.link || '') : null;
+          return (
           <article class="simple-resource">
             <h3 class="simple-title">{item.title}</h3>
             {item.description && <p class="simple-desc">{item.description}</p>}
@@ -57,11 +83,23 @@ function getButtonClass(link?: string) {
                   <img src={item.link} alt={item.title} style="width:100%;border-radius:6px;margin-top:0.5rem;" />
                 </a>
               </p>
+            ) : item.isYouTube && youtubeId ? (
+              <div class="youtube-embed">
+                <iframe
+                  src={`https://www.youtube.com/embed/${youtubeId}`}
+                  title={item.title}
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                ></iframe>
+              </div>
             ) : (
               item.link && <p><a href={item.link} class={`resource-button ${getButtonClass(item.link)}`} target="_blank" rel="noopener noreferrer">{getButtonLabel(item.link)}</a></p>
             )}
           </article>
-        ))}
+          );
+        })}
       </div>
     </CategorySection>
   ))}

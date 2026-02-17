@@ -38,7 +38,8 @@ const writtenGuides = [
     title: "Reclamation Algorithm Video Guide",
     description: "Video guide to the Reclamation Algorithm event by DoctorSockrates",
     url: "https://youtu.be/Q3GRVHqg0EE?si=-ifvnNYBhPYpmoR9",
-    category: "Event Guides"
+    category: "Event Guides",
+    isYouTube: true
   },
   {
     title: "Operator Trust Accumulation",
@@ -105,6 +106,7 @@ const writtenGuides = [
         description={resource.description}
         url={resource.url}
         category={resource.category}
+        isYouTube={resource.isYouTube}
       />
     ))}
   </CategorySection>

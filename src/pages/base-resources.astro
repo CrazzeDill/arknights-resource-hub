@@ -29,7 +29,8 @@ const layoutEfficiency = [
     title: "80 Second Economics - Base-Related Video Guides",
     description: "Video guides by cube#1588 covering base layout efficiency (last updated August 23, 2020)",
     url: "https://www.youtube.com/watch?v=eolMMsRn794",
-    category: "Layout & Efficiency"
+    category: "Layout & Efficiency",
+    isYouTube: true
   },
   {
     title: "Orundum Farming Guide",
@@ -85,6 +86,7 @@ const infographics = [
         description={resource.description}
         url={resource.url}
         category={resource.category}
+        isYouTube={resource.isYouTube}
       />
     ))}
   </CategorySection>

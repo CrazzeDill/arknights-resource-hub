@@ -6,9 +6,34 @@ export interface Props {
   url: string;
   category?: string;
   isImage?: boolean;
+  isYouTube?: boolean;
 }
 
-const { title, description, url, category, isImage = false } = Astro.props;
+// Extract YouTube video ID from various YouTube URL formats
+function getYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    // Handle youtube.com/watch?v=VIDEO_ID
+    if (u.hostname.includes('youtube.com') && u.searchParams.has('v')) {
+      return u.searchParams.get('v');
+    }
+    // Handle youtu.be/VIDEO_ID
+    if (u.hostname === 'youtu.be') {
+      return u.pathname.slice(1).split('/')[0];
+    }
+    // Handle youtube.com/embed/VIDEO_ID
+    if (u.hostname.includes('youtube.com') && u.pathname.startsWith('/embed/')) {
+      return u.pathname.split('/embed/')[1]?.split('/')[0];
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+const { title, description, url, category, isImage = false, isYouTube = false } = Astro.props;
+const youtubeId = isYouTube ? getYouTubeVideoId(url) : null;
 ---
 
 <div class="resource-card">
@@ -17,12 +42,27 @@ const { title, description, url, category, isImage = false } = Astro.props;
     <h3>{title}</h3>
   </div>
   <div class="resource-card-body">
-    <img src="/src/assets/thumbnail-placeholder.svg" alt="Thumbnail preview" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.75rem;">
+    {isYouTube && youtubeId ? (
+      <div class="youtube-embed">
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}`}
+          title={title}
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+    ) : (
+      <img src="/src/assets/thumbnail-placeholder.svg" alt="Thumbnail preview" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.75rem;">
+    )}
     <p>{description}</p>
   </div>
-  <div class="resource-card-footer">
-    <a href={url} class={`resource-link ${isImage ? 'image-link' : ''}`} target="_blank" rel="noopener noreferrer">
-      {isImage ? 'View Image' : 'Visit Resource'}
-    </a>
-  </div>
+  {(!isYouTube || !youtubeId) && (
+    <div class="resource-card-footer">
+      <a href={url} class={`resource-link ${isImage ? 'image-link' : ''}`} target="_blank" rel="noopener noreferrer">
+        {isImage ? 'View Image' : 'Visit Resource'}
+      </a>
+    </div>
+  )}
 </div>
