@@ -1,12 +1,14 @@
 ---
-// Resource card component
+// Resource card component with enhanced visual design
 export interface Props {
   title: string;
   description: string;
   url: string;
   category?: string;
+  categoryIcon?: 'wiki' | 'planning' | 'database' | 'calculator' | 'maps' | 'reference' | 'guide' | 'default';
   isImage?: boolean;
   isYouTube?: boolean;
+  credit?: string;
 }
 
 // Extract YouTube video ID from various YouTube URL formats
@@ -14,15 +16,12 @@ function getYouTubeVideoId(url: string): string | null {
   if (!url) return null;
   try {
     const u = new URL(url);
-    // Handle youtube.com/watch?v=VIDEO_ID
     if (u.hostname.includes('youtube.com') && u.searchParams.has('v')) {
       return u.searchParams.get('v');
     }
-    // Handle youtu.be/VIDEO_ID
     if (u.hostname === 'youtu.be') {
       return u.pathname.slice(1).split('/')[0];
     }
-    // Handle youtube.com/embed/VIDEO_ID
     if (u.hostname.includes('youtube.com') && u.pathname.startsWith('/embed/')) {
       return u.pathname.split('/embed/')[1]?.split('/')[0];
     }
@@ -32,14 +31,36 @@ function getYouTubeVideoId(url: string): string | null {
   return null;
 }
 
-const { title, description, url, category, isImage = false, isYouTube = false } = Astro.props;
+// Category icon SVGs
+const categoryIcons: Record<string, string> = {
+  wiki: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`,
+  planning: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
+  database: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>`,
+  calculator: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="8" y1="18" x2="8" y2="18"></line><line x1="12" y1="18" x2="12" y2="18"></line></svg>`,
+  maps: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>`,
+  reference: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+  guide: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>`,
+  default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`
+};
+
+const { title, description, url, category, categoryIcon = 'default', isImage = false, isYouTube = false, credit } = Astro.props;
 const youtubeId = isYouTube ? getYouTubeVideoId(url) : null;
+const iconSvg = categoryIcons[categoryIcon] || categoryIcons.default;
 ---
 
 <div class="resource-card">
   <div class="resource-card-header">
-    {category && <span class="resource-category">{category}</span>}
-    <h3>{title}</h3>
+    {category && (
+      <span class="resource-category">
+        <span class="card-icon" set:html={iconSvg} />
+        {category}
+      </span>
+    )}
+    <h3>
+      <a href={url} target="_blank" rel="noopener noreferrer" class="resource-title-link">
+        {title}
+      </a>
+    </h3>
   </div>
   <div class="resource-card-body">
     {isYouTube && youtubeId ? (
@@ -53,16 +74,68 @@ const youtubeId = isYouTube ? getYouTubeVideoId(url) : null;
           allowfullscreen
         ></iframe>
       </div>
-    ) : (
-      <img src="/src/assets/thumbnail-placeholder.svg" alt="Thumbnail preview" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.75rem;">
-    )}
-    <p>{description}</p>
+    ) : isImage ? (
+      <a href={url} target="_blank" rel="noopener noreferrer" class="image-preview-link">
+        <img src={url} alt={title} loading="lazy" />
+      </a>
+    ) : null}
+    <p class="resource-description">{description}</p>
+    {credit && <p class="resource-credit">Credit: <span class="credit-name">{credit}</span></p>}
   </div>
   {(!isYouTube || !youtubeId) && (
     <div class="resource-card-footer">
-      <a href={url} class={`resource-link ${isImage ? 'image-link' : ''}`} target="_blank" rel="noopener noreferrer">
-        {isImage ? 'View Image' : 'Visit Resource'}
+      <a href={url} class="resource-link" target="_blank" rel="noopener noreferrer">
+        {isImage ? 'View Image' : 'Open Resource'}
       </a>
     </div>
   )}
 </div>
+
+<style>
+  .resource-title-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  .resource-title-link:hover {
+    color: var(--accent-light);
+  }
+  
+  .resource-description {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  
+  .resource-credit {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  
+  .credit-name {
+    color: var(--text-secondary);
+  }
+  
+  .image-preview-link {
+    display: block;
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+  }
+  
+  .image-preview-link:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .image-preview-link img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

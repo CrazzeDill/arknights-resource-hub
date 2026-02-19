@@ -1,11 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <!-- Black outline -->
-  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
-        fill="none" stroke="black" stroke-width="0.5"/>
-  <!-- White outline -->
-  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
-        fill="none" stroke="white" stroke-width="0.3"/>
-  <!-- Red fill -->
-  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,17H13V15H11V17M11,13H13V7H11V13Z" 
-        fill="#d32f2f"/>
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <filter id="svg_3_blur">
+   <feGaussianBlur stdDeviation="0" in="SourceGraphic"/>
+  </filter>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path stroke-width="18" id="svg_1" d="m18.28577,359.00001l181.71424,-318.00002l181.71424,318.00002l-363.42847,0l-0.00001,0z" stroke="#0d4a85" fill="none"/>
+  <path filter="url(#svg_3_blur)" id="svg_3" d="m54.85709,338.00001l145.14291,-254.00003l145.14291,254.00003l-290.28582,0z" fill="#ececec"/>
+ </g>
 </svg>

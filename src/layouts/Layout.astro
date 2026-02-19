@@ -52,12 +52,12 @@ import ImageModal from '../components/ImageModal.astro';
               clearActive();
               link.classList.add('active');
               // If the link has a data-parent, also activate the parent group link
-              const parentId = link.dataset.parent;
-              if (parentId) {
-                // parent links in our markup are not anchors; try to find a matching child anchor with that parent id
-                const parentAnchor = document.querySelector('.sidebar-nav a[data-parent="' + parentId + '"]') as HTMLAnchorElement | null;
-                if (parentAnchor) parentAnchor.classList.add('active');
-              }
+              // const parentId = link.dataset.parent;
+              // if (parentId) {
+              //   // parent links in our markup are not anchors; try to find a matching child anchor with that parent id
+              //   const parentAnchor = document.querySelector('.sidebar-nav a[data-parent="' + parentId + '"]') as HTMLAnchorElement | null;
+              //   if (parentAnchor) parentAnchor.classList.add('active');
+              // }
             }
           });
         }, { root: null, rootMargin: '0px 0px -60% 0px', threshold: 0 });
